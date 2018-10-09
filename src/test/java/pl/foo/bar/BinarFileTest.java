@@ -87,6 +87,23 @@ public class BinarFileTest {
         assertThat(result).isEqualTo(expectedFileContent);
     }
 
+    //Adding an mapping for the extension of the file to the application.yml of the SCC server helps
+    //https://github.com/spring-cloud/spring-cloud-config/issues/926#issuecomment-369683334
+    @Test
+    public void workaroundShowcase() throws IOException {
+        //given
+        final byte[] expectedFileContent = Resources.toByteArray(Resources.getResource("files/foo/bar/rm.bin"));
+
+        //when
+        HttpURLConnection con = (HttpURLConnection) new URL("http://localhost:8888/foo/bar/master/rm.bin").openConnection();
+        //con.setRequestProperty("Accept", MediaType.APPLICATION_OCTET_STREAM_VALUE); // - setting this header is not needed
+
+        final byte[] result = getAsByteArray(con);
+
+        //then
+        assertThat(result).isEqualTo(expectedFileContent);
+    }
+
     private String getAsUtf8String(HttpURLConnection con) throws IOException {
         try {
             return IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8);

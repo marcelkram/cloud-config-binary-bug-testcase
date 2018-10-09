@@ -9,3 +9,7 @@ spring:
           searchLocations: classpath:/files/{application}/{profile}
   profiles:
     active: native
+
+  mvc:
+    media-types:
+      bin: application/octet-stream
